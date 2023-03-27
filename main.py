@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from fastapi.websockets import WebSocket
+from fastapi.websockets import WebSocket, WebSocketDisconnect
 
 app = FastAPI()
 
@@ -17,8 +17,11 @@ async def say_hello(name: str):
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    while True:
-        data = await websocket.receive_text()
-        print(data)
-        response_data = {"Message": "Health"}
-        await websocket.send_json(response_data)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            print(data)
+            response_data = {"Message": "Health"}
+            await websocket.send_json(response_data)
+    except WebSocketDisconnect:
+        pass
