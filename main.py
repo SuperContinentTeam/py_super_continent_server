@@ -1,4 +1,3 @@
-import uvicorn
 from fastapi import FastAPI
 from fastapi.websockets import WebSocket
 
@@ -23,7 +22,3 @@ async def websocket_endpoint(websocket: WebSocket):
         print(data)
         response_data = {"Message": "Health"}
         await websocket.send_json(response_data)
-
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
